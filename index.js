@@ -11,15 +11,15 @@ fetch('https://galvanize-eats-api.herokuapp.com/menu')
             var choice = document.createElement('option')
             choice.innerText = data.menu[i].name + " $" + data.menu[i].price
             choice.setAttribute('value', data.menu[i].name)
+            choice.setAttribute('id', data.menu[i].price)
             choice.classList.add("dropdown-item")
             select.appendChild(choice)
-            // choice.addEventListener('change', arrayAdd)
-            // add a value to each menu item
 
         }
         var select = document.querySelector('#selectBar')
         select.addEventListener('change', function(event){
             orderItem = document.querySelector('#selectBar option:checked').innerText
+            orderPrice = document.querySelector('#selectBar option:checked').id
         
         })
     
@@ -31,43 +31,21 @@ quantity.addEventListener('change', function(event){
     itemQuantity = document.querySelector('#quant option:checked').innerText
 })
 
-var addItem = document.querySelector("#addItem")
-addItem.addEventListener('click', populateList)
+ var addItem = document.querySelector("#addItem")
+ addItem.addEventListener('click', populateList)
 
 function populateList() {
-    var orderBox = document.querySelector('.orderbox')
+    var thingOrdered = document.querySelector('.thingordered')
     var myOrder = document.createElement('p')
-    orderBox.appendChild(myOrder)
+    thingOrdered.appendChild(myOrder)
     myOrder.innerText = itemQuantity + " x " + orderItem
-
+    var subtotal = document.querySelector('.subtotal')
+    var subtotalValue = orderPrice
+    var taxValue = (subtotalValue * .07).toFixed(2)
+    var tax = document.querySelector('.tax')
+    var totalValue = subtotalValue + taxValue
+    var total = document.querySelector('.total')
+    subtotal.innerText = 'Subtotal ' + '$' + parseFloat(subtotalValue)
+    tax.innerText = 'Tax ' + '$' + parseFloat(taxValue)
+    total.innerText = 'Total ' + '$' + parseFloat(totalValue)
 }
-    
-// function selectItem() {
-//     event.target.setAttribute("class", "frog")
-//     console.log(event.target)
-// }
-
-// var options = document.querySelectAll('option')
-
-// function arrayAdd() {
-    
-//     console.log(event.target)
-    
-//  }
-
-//  var addItem = document.querySelector('#addItem')
-
-//  addItem.addEventListener('click', valueAdd)
-
-//  function valueAdd() {
-//      var quantity = option.selected.innerHTML
-//      console.log(quantity)
-//  }
-
-
-
-
-
-
-//Use a loop to create a line of text and fill it in with that input - in or out of the prior function
-//Collect input and feed it into an equation that gives us our total
