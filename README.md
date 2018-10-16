@@ -1,3 +1,3 @@
 # Galvanize Eats
 
-ADD YOUR DEPLOYED URL HERE
+http://feeble-friend.surge.sh/
