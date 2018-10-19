@@ -1,4 +1,5 @@
 var orderItem = ''
+
 fetch('https://galvanize-eats-api.herokuapp.com/menu')
 
 
@@ -16,7 +17,7 @@ fetch('https://galvanize-eats-api.herokuapp.com/menu')
             select.appendChild(choice)
 
         }
-        var select = document.querySelector('#selectBar')
+
         select.addEventListener('change', function(event){
             orderItem = document.querySelector('#selectBar option:checked').innerText
             orderPrice = document.querySelector('#selectBar option:checked').id
@@ -31,8 +32,9 @@ quantity.addEventListener('change', function(event){
     itemQuantity = document.querySelector('#quant option:checked').innerText
 })
 
- var addItem = document.querySelector("#addItem")
+ var addItem = document.querySelector('#addItem')
  addItem.addEventListener('click', populateList)
+ var thisOrderHere = {cart: []}
 
 function populateList() {
     var thingOrdered = document.querySelector('.thingordered')
@@ -40,12 +42,34 @@ function populateList() {
     thingOrdered.appendChild(myOrder)
     myOrder.innerText = itemQuantity + " x " + orderItem
     var subtotal = document.querySelector('.subtotal')
-    var subtotalValue = orderPrice
+    var subtotalValue = orderPrice * itemQuantity
     var taxValue = (subtotalValue * .07).toFixed(2)
     var tax = document.querySelector('.tax')
     var totalValue = subtotalValue + taxValue
     var total = document.querySelector('.total')
     subtotal.innerText = 'Subtotal ' + '$' + parseFloat(subtotalValue)
     tax.innerText = 'Tax ' + '$' + parseFloat(taxValue)
-    total.innerText = 'Total ' + '$' + parseFloat(totalValue)
+    total.innerText = 'Total ' + '$' + parseFloat(totalValue + parseInt(total.innerText))
+    var newItem = {}
+    newItem[orderItem] = itemQuantity
+    thisOrderHere.cart.push(newItem)
+}
+
+
+var submitButton = document.querySelector('#submitbutton')
+
+submitButton.addEventListener('click', sendOrder)
+
+function sendOrder(event) {
+
+    event.preventDefault()
+fetch("https://galvanize-eats-api.herokuapp.com/orders", {
+    method: "POST",
+    headers: {"Content-Type" : "application/json"},
+    body: JSON.stringify(thisOrderHere)
+})
+       .then(function (response) {
+        var thanks = document.getElementById('thanks')
+        thanks.innerText= 'Thank you for your order.'
+       }) 
 }
